@@ -1,35 +1,18 @@
-FROM node:18-slim
+FROM ghcr.io/puppeteer/puppeteer:19.7.0
 
-# Install Chrome dependencies
-RUN apt-get update \
-    && apt-get install -y wget gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-kacst fonts-freefont-ttf libxss1 \
-    --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+USER root
 
-# Create working directory
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
+# Copy your application files
+COPY . .
 
 # Install dependencies
 RUN npm install
 
-# Copy rest of the code
-COPY . .
+# Set environment variable for Puppeteer
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
 
-# Add user
-RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
-    && mkdir -p /home/pptruser/Downloads \
-    && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app
-
-# Run everything after as non-privileged user
+# Switch back to pptruser (puppeteer's user)
 USER pptruser
 
-# Start the bot
+# Start your bot
 CMD ["node", "index.js"]
