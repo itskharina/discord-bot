@@ -71,7 +71,4 @@ const getGameSteamPrice = async (gameName) => {
 	}
 };
 
-// console.log(getGameSteamPrice('warframe'));
-
-// Export the function for use in other files
 module.exports = getGameSteamPrice;

@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 // Scrapes game pricing information from Allkeyshop.com
-const scrapeAllkeyshop = async (gameName) => {
+const getGameAKSPrice = async (gameName) => {
 	try {
 		// Format the game name for URL (lowercase and replace spaces with hyphens)
 		const formattedGameName = gameName.toLowerCase().replace(/ /g, '-');
@@ -16,6 +16,8 @@ const scrapeAllkeyshop = async (gameName) => {
 			searchUrl =
 				'https://www.allkeyshop.com/blog/en-gb/compare-and-buy-cd-key-for-digital-download-minecraft/';
 		}
+
+		// console.log(`Searching URL: ${searchUrl}`);
 
 		// Navigate to the search URL
 		await page.goto(searchUrl);
@@ -33,6 +35,8 @@ const scrapeAllkeyshop = async (gameName) => {
 			return;
 		}
 
+		// console.log('Page exists');
+
 		// Wait for the offers table to load
 		await page.waitForSelector('.offers-table-row');
 
@@ -49,9 +53,14 @@ const scrapeAllkeyshop = async (gameName) => {
 		await page.waitForSelector('.offers-table-row', { timeout: 5000 });
 
 		// Extract game pricing data from the page
-		const gamePrices = await page.evaluate(() => {
+		const { actualGameName, AKSGameInfo } = await page.evaluate(() => {
+			// Updated selector with optional chaining
+			const actualGameName = document
+				.querySelector('.content-box-title h1 span[data-itemprop="name"]')
+				.textContent.trim();
+
 			const elements = document.querySelectorAll('.offers-table-row');
-			const gamePrices = [];
+			const AKSGameInfo = [];
 
 			// Iterate through each offer row
 			for (const element of elements) {
@@ -84,7 +93,7 @@ const scrapeAllkeyshop = async (gameName) => {
 				);
 
 				// Add all extracted data to array
-				gamePrices.push({
+				AKSGameInfo.push({
 					merchantTitle,
 					price,
 					priceToSort,
@@ -93,18 +102,23 @@ const scrapeAllkeyshop = async (gameName) => {
 				});
 			}
 
-			return gamePrices;
+			return { actualGameName, AKSGameInfo };
 		});
+		//
+		// console.log(`Found ${AKSGameInfo.length} prices`);
+		// console.log('Extracted game name:', actualGameName);
 
 		// Sort prices from lowest to highest
-		gamePrices.sort((a, b) => a.priceToSort - b.priceToSort);
+		AKSGameInfo.sort((a, b) => a.priceToSort - b.priceToSort);
 
 		// Clean up by closing the browser
 		await browser.close();
-		console.log(gamePrices);
+		return { actualGameName, AKSGameInfo };
 	} catch (error) {
 		console.error('An error occurred:', error);
 	}
 };
 
-scrapeAllkeyshop('core keeper');
+// getGameAKSPrice('tribes of midgard');
+
+module.exports = getGameAKSPrice;
