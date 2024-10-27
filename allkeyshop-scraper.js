@@ -9,18 +9,16 @@ const getGameAKSPrice = async (gameName) => {
 
 		// Initialize Puppeteer browser and new page
 		const browser = await puppeteer.launch({
+			executablePath: '/usr/bin/google-chrome',
 			args: [
 				'--no-sandbox',
 				'--disable-setuid-sandbox',
 				'--disable-dev-shm-usage',
-				'--disable-accelerated-2d-canvas',
-				'--no-first-run',
-				'--no-zygote',
+				'--single-process',
 				'--disable-gpu',
+				'--no-zygote',
 			],
 			headless: 'new',
-			executablePath:
-				process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome',
 		});
 		const page = await browser.newPage();
 
