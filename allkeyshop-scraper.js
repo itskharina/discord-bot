@@ -8,7 +8,20 @@ const getGameAKSPrice = async (gameName) => {
 		let searchUrl = `https://www.allkeyshop.com/blog/en-gb/buy-${formattedGameName}-cd-key-compare-prices/`;
 
 		// Initialize Puppeteer browser and new page
-		const browser = await puppeteer.launch();
+		const browser = await puppeteer.launch({
+			args: [
+				'--no-sandbox',
+				'--disable-setuid-sandbox',
+				'--disable-dev-shm-usage',
+				'--disable-accelerated-2d-canvas',
+				'--no-first-run',
+				'--no-zygote',
+				'--disable-gpu',
+			],
+			headless: 'new',
+			executablePath:
+				process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/google-chrome',
+		});
 		const page = await browser.newPage();
 
 		// Special case handling for Minecraft which has a different URL structure
