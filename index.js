@@ -1,7 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { db } = require('./database/init');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
+
 // Initialize Discord client with specified intents
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -56,3 +58,21 @@ for (const file of eventFiles) {
 
 // Log in to Discord with the bot token from environment variables
 client.login(process.env.TOKEN);
+
+// Handles shutdown
+const shutdown = async () => {
+	console.log('Shutting down...');
+	const priceChecker = require('./services/price-checker-service');
+	priceChecker.stop();
+	await db.close((err) => {
+		if (err) {
+			console.error('Error closing database:', err);
+		} else {
+			console.log('Database connection closed');
+		}
+	});
+	await client.destroy();
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

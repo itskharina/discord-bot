@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const priceChecker = require('../services/price-checker-service');
 
 module.exports = {
 	// Name of the event to listen for (when client is ready)
@@ -11,5 +12,7 @@ module.exports = {
 	execute(client) {
 		// Log a message showing the bot's username and discriminator
 		console.log(`Ready! Logged in as ${client.user.tag}`);
+		// Start the price checker function
+		priceChecker.start();
 	},
 };
