@@ -65,11 +65,11 @@ module.exports = {
 			if (lowestAKSPrice && steamGameInfo) {
 				if (lowestAKSPrice < steamPrice) {
 					description = `🏆 **Best Price Found on AllKeyShop**\n
-					🏪 **Merchant:** ${lowestAKSPriceInfo[0].merchantTitle}
-					💰 **Price:** ${lowestAKSPriceInfo[0].price} ${discount}\n
+					🏪 **Merchant:** ${lowestAKSPriceInfo.merchantTitle}
+					💰 **Price:** ${lowestAKSPriceInfo.price} ${discount}\n
 					🔄 **Steam Price:** ${steamGameInfo.finalPrice}
 					💵 **You Save:** £${(steamPrice - lowestAKSPrice).toFixed(2)}\n
-					[🛒 Buy from AllKeyShop](${lowestAKSPriceInfo[0].merchantLink})`;
+					[🛒 Buy from AllKeyShop](${lowestAKSPriceInfo.merchantLink})`;
 				} else if (lowestAKSPrice === steamPrice) {
 					description = `⚖️ **Prices Are Equal**\n
 					💰 **Price:** ${steamGameInfo.finalPrice}
@@ -78,7 +78,7 @@ module.exports = {
 				} else {
 					description = `🏆 **Best Price Found on Steam**\n
 					💰 **Steam Price:** ${steamGameInfo.finalPrice}\n
-					📊 **AllKeyShop Price:** ${lowestAKSPriceInfo[0].price}
+					📊 **AllKeyShop Price:** ${lowestAKSPriceInfo.price}
 					💵 **You Save:** £${(lowestAKSPrice - steamPrice).toFixed(2)}\n
 					[🛒 Buy on Steam](${steamGameInfo.link})`;
 				}

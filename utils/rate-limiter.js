@@ -10,19 +10,22 @@ class RateLimiter {
 
 	async waitForToken() {
 		const now = Date.now();
-		// Remove old requests
+		// Remove old requests that are outside the current time window
 		this.requests = this.requests.filter(
 			(time) => time > now - this.timeWindow,
 		);
 
+		// If the number of requests has reached the maximum allowed
 		if (this.requests.length >= this.maxRequests) {
 			// Wait until the oldest request expires
 			const oldestRequest = this.requests[0];
+			// Calculate the wait time by subtracting the time window from the oldest request timestamp
 			const waitTime = oldestRequest - (now - this.timeWindow);
+			// Wait for the calculated wait time before resolving the promise
 			await new Promise((resolve) => setTimeout(resolve, waitTime));
 		}
 
-		// Add current request timestamp
+		// Add current request timestamp to the array
 		this.requests.push(now);
 	}
 }

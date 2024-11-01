@@ -69,12 +69,12 @@ const dbOperations = {
 			// db.all() gets ALL rows that match the query
 			db.all(query, [], (err, rows) => {
 				if (err) reject(err);
-				else resolve(rows);
+				resolve(rows);
 			});
 		});
 	},
 
-	// Updates current price and notification timestamp for a game
+	// Updates current price and notification timestamp for a game - NOT NEEDED RN
 	updateWishlistCurrentPrice: (userId, gameName, currentPrice) => {
 		return dbQueue.add(
 			() =>
@@ -87,7 +87,7 @@ const dbOperations = {
 					`;
 					db.all(query, [currentPrice, userId, gameName], (err) => {
 						if (err) reject(err);
-						else resolve();
+						resolve();
 					});
 				}),
 		);
@@ -105,7 +105,7 @@ const dbOperations = {
 					`;
 					db.all(query, [userId, gameName], (err) => {
 						if (err) reject(err);
-						else resolve();
+						resolve();
 					});
 				}),
 		);
