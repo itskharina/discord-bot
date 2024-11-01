@@ -3,19 +3,17 @@ const { EmbedBuilder } = require('discord.js');
 const getGameAKSPrice = require('../../allkeyshop-scraper');
 
 module.exports = {
-	// Define the slash command structure
 	data: new SlashCommandBuilder()
-		.setName('aksprice') // Command name that users will type
-		.setDescription('Shows AKS information for the requested game.') // Command description shown in Discord
+		.setName('aksprice')
+		.setDescription('Shows AKS information for the requested game.')
 		.addStringOption(
 			(option) =>
 				option
-					.setName('game') // Parameter name
-					.setDescription('The name of the game') // Parameter description
+					.setName('game')
+					.setDescription('The name of the game')
 					.setRequired(true), // Make the parameter mandatory
 		),
 
-	// Command execution function
 	async execute(interaction) {
 		// Defer reply since API call might take time
 		await interaction.deferReply();
@@ -25,6 +23,7 @@ module.exports = {
 
 		try {
 			// Fetch the game's price information using the allkeyshop-scraper module
+			// actualGameName is the game name written with the correct capitalisation
 			const { actualGameName, AKSGameInfo } = await getGameAKSPrice(gameName);
 
 			// If no price information is found, send an error message

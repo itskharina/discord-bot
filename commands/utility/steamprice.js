@@ -3,9 +3,8 @@ const { SlashCommandBuilder } = require('discord.js');
 const getGameSteamPrice = require('../../steam-price-checker');
 
 module.exports = {
-	// Define the slash command structure
 	data: new SlashCommandBuilder()
-		.setName('steamprice') // Command name that users will type
+		.setName('steamprice')
 		.setDescription('Shows steam price information for the requested game.')
 		.addStringOption((option) =>
 			option

@@ -10,7 +10,6 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('wishlistadd')
 		.setDescription('Add a game to your wishlist')
-		// Optional target price parameter
 		.addStringOption((option) =>
 			option
 				.setName('game')

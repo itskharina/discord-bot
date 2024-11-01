@@ -10,16 +10,15 @@ module.exports = {
 		.setName('lowestprice')
 		.setDescription(
 			'Shows lowest available price information for the requested game.',
-		) // Command description shown in Discord
+		)
 		.addStringOption(
 			(option) =>
 				option
-					.setName('game') // Parameter name
-					.setDescription('The name of the game') // Parameter description
+					.setName('game')
+					.setDescription('The name of the game')
 					.setRequired(true), // Make the parameter mandatory
 		),
 
-	// Command execution function
 	async execute(interaction) {
 		try {
 			// Defer reply since API call might take time
@@ -54,7 +53,6 @@ module.exports = {
 			const steamPrice = Number.parseFloat(
 				steamGameInfo.finalPrice.replace('£', ''),
 			);
-			console.log(lowestAKSPriceInfo);
 
 			let description = '';
 			// Edit the embed description based on which source has the lowest price

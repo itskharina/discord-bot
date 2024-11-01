@@ -1,6 +1,7 @@
 const { Client, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 
+// Initialize Discord client with specified intents
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -9,13 +10,15 @@ const client = new Client({
 	],
 });
 
+// Log in to Discord with the bot token from environment variables
 client.login(process.env.TOKEN);
 
-const channelId = '1298114302888120352';
-
+// Function to send a price alert to a specific channel
 async function sendPriceAlert(userId, gameName, currentPrice) {
 	try {
-		const channel = await client.channels.fetch(channelId);
+		// Fetch the channel using the channel ID
+		const channel = await client.channels.fetch(process.env.CHANNEL_ID);
+		// Send a message in the channel, mentioning the user and including the price alert
 		await channel.send(
 			`<@${userId}> Great news! The price of **${gameName}** has dropped to ${currentPrice}, which is at or below your target price!`,
 		);
