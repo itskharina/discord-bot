@@ -110,21 +110,6 @@ const dbOperations = {
 		);
 	},
 
-	// Get user by their ID
-	getUserById: (userId) => {
-		return new Promise((resolve, reject) => {
-			const query = `
-			SELECT * 
-			FROM wishlist
-			WHERE user_id = ?
-			`;
-			db.get(query, [userId], (err, row) => {
-				if (err) reject(err);
-				resolve(row);
-			});
-		});
-	},
-
 	// Updates the last notified price alert timestamp for a game
 	updateLastNotified: (userId, gameName) => {
 		return new Promise((resolve, reject) => {
