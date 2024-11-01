@@ -13,7 +13,8 @@ module.exports = {
 					**/steamprice** \`<text>\`: Provides the latest Steam game details and pricing for the specified game.\n
 					**/lowestprice \`<text>\`**: Retrieves the lowest game price for the specified game across both Steam and AllKeyShop.\n
 					**/wishlistadd \`<text>\` \`<number>\`**: Allows the user to add a game and a target price to a wishlist for easier tracking.\n
-					**/wishlistcheck**: Allows the user to see all of the games on their wishlist, along with the current price and their target price.`,
+					**/wishlistcheck**: Allows the user to see all of the games on their wishlist, along with the current price and their target price.\n
+					**/wishlistdelete \`<text>\`**: Allows the user to delete a game from their wishlist.`,
 			);
 
 		// Send the embed message as a reply to the interaction
