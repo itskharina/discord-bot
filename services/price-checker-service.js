@@ -1,8 +1,11 @@
 const {
 	getAllWishlistGames,
 	updateWishlistCurrentPrice,
+	getUserById,
+	updateLastNotified,
 } = require('../database/queries');
 const getPriceInfo = require('../utils/compare-prices');
+const sendPriceAlert = require('../services/price-alert');
 
 class PriceCheckerService {
 	constructor() {
@@ -82,6 +85,22 @@ class PriceCheckerService {
 				console.log(
 					`Updated price for ${game.game_name}: ${result.currentPrice}`,
 				);
+
+				if (game.target_price && result.currentPrice <= game.target_price) {
+					const now = new Date();
+					const lastNotified = new Date(game.last_notified);
+
+					// Check if the user has already been notified about the price drop
+					if (game.last_notified == null) {
+						// If not, send alert to the user
+						await sendPriceAlert(
+							game.user_id,
+							game.game_name,
+							result.currentPrice,
+						);
+						await updateLastNotified(game.user_id, game.game_name);
+					}
+				}
 			} else {
 				console.log(`No price update available for ${game.game_name}`);
 			}

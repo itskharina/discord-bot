@@ -1,11 +1,17 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { db } = require('./database/init');
+const db = require('./database/init');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 require('dotenv').config();
 
 // Initialize Discord client with specified intents
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+	],
+});
 
 // Create a new Collection to store bot commands
 client.commands = new Collection();
@@ -72,6 +78,7 @@ const shutdown = async () => {
 		}
 	});
 	await client.destroy();
+	process.exit(0);
 };
 
 process.on('SIGINT', shutdown);

@@ -43,7 +43,7 @@ module.exports = {
 			}
 
 			// Remove specified game from wishlist
-			await removeFromWishlist(userId, gameName);
+			await removeFromWishlist(userId, gameToDelete.game_name);
 
 			const embed = new EmbedBuilder()
 				.setTitle('Deletion successful!')

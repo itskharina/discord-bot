@@ -74,15 +74,14 @@ const dbOperations = {
 		});
 	},
 
-	// Updates current price and notification timestamp for a game - NOT NEEDED RN
+	// Updates current price and notification timestamp for a game
 	updateWishlistCurrentPrice: (userId, gameName, currentPrice) => {
 		return dbQueue.add(
 			() =>
 				new Promise((resolve, reject) => {
 					const query = `
 						UPDATE wishlist
-						SET current_price = ?,
-						last_notified = CURRENT_TIMESTAMP 
+						SET current_price = ?
 						WHERE user_id = ? AND game_name = ?
 					`;
 					db.all(query, [currentPrice, userId, gameName], (err) => {
@@ -109,6 +108,37 @@ const dbOperations = {
 					});
 				}),
 		);
+	},
+
+	// Get user by their ID
+	getUserById: (userId) => {
+		return new Promise((resolve, reject) => {
+			const query = `
+			SELECT * 
+			FROM wishlist
+			WHERE user_id = ?
+			`;
+			db.get(query, [userId], (err, row) => {
+				if (err) reject(err);
+				resolve(row);
+			});
+		});
+	},
+
+	// Updates the last notified price alert timestamp for a game
+	updateLastNotified: (userId, gameName) => {
+		return new Promise((resolve, reject) => {
+			const query = `
+			UPDATE wishlist
+			SET last_notified = CURRENT_TIMESTAMP
+			WHERE user_id = ? 
+			AND game_name = ?
+			`;
+			db.run(query, [userId, gameName], (err) => {
+				if (err) reject(err);
+				resolve();
+			});
+		});
 	},
 };
 

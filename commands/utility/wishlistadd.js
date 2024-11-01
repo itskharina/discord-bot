@@ -48,6 +48,10 @@ module.exports = {
 				? `£${targetPrice.toFixed(2)}`
 				: null;
 
+			const currentPriceAsNumber = Number.parseFloat(
+				currentPrice.replace('£', ''),
+			);
+
 			// Add game to wishlist database
 			await addToWishlist(
 				userId,
@@ -71,6 +75,12 @@ module.exports = {
 			await interaction.editReply({
 				embeds: [embed],
 			});
+			if (targetPrice && currentPriceAsNumber <= targetPrice) {
+				// Send a second message if the current price is equal to or less than the target price
+				await interaction.followUp(
+					`The current price of **${actualGameName}** is now ${currentPrice}, which is at or below your target price of ${formattedTargetPrice}!`,
+				);
+			}
 		} catch (error) {
 			console.error(error);
 			await interaction.editReply({
